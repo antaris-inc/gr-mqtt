@@ -7,5 +7,6 @@
 #
 
 install(FILES
-    mqtt_mqtt_sink.block.yml DESTINATION share/gnuradio/grc/blocks
+    mqtt_mqtt_sink.block.yml
+    mqtt_mqtt_source.block.yml DESTINATION share/gnuradio/grc/blocks
 )

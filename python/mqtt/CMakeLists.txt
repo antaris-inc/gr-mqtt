@@ -22,7 +22,8 @@ add_subdirectory(bindings)
 GR_PYTHON_INSTALL(
     FILES
     __init__.py
-    mqtt_sink.py DESTINATION ${GR_PYTHON_DIR}/gnuradio/mqtt
+    mqtt_sink.py
+    mqtt_source.py DESTINATION ${GR_PYTHON_DIR}/gnuradio/mqtt
 )
 
 ########################################################################

@@ -21,4 +21,5 @@ except ModuleNotFoundError:
 
 # import any pure python here
 from .mqtt_sink import mqtt_sink
+from .mqtt_source import mqtt_source
 #
