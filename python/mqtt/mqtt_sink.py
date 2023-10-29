@@ -16,7 +16,7 @@ from gnuradio import gr
 
 class mqtt_sink(gr.sync_block):
 
-    def __init__(self, host, port, topic):
+    def __init__(self, host, port, topic, username, password):
         gr.sync_block.__init__(self,
             name="mqtt_sink",
             in_sig=None,
@@ -28,6 +28,7 @@ class mqtt_sink(gr.sync_block):
         self.set_msg_handler(pmt.intern('message'), self.handle)
 
         self.client = paho_mqtt.Client()
+        self.client.username_pw_set(username, password)
         self.client.connect(host, port, 30)
         self.client.loop_start()
 

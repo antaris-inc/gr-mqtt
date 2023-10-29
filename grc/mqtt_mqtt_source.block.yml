@@ -5,7 +5,7 @@ category: '[mqtt]'
 
 templates:
   imports: from gnuradio import mqtt
-  make: mqtt.mqtt_source(${host}, ${port}, ${topic})
+  make: mqtt.mqtt_source(${host}, ${port}, ${topic}, ${username}, ${password})
 
 #  Make one 'parameters' list entry for every parameter you want settable from the GUI.
 #     Keys include:
@@ -17,15 +17,25 @@ parameters:
 - id: host
   label: MQTT Broker Host
   dtype: string
-  default: 
+  default:
 - id: port
   label: MQTT Broker Port
   dtype: int
-  default: 
+  default:
 - id: topic
   label: MQTT Topic
   dtype: string
-  default: 
+  default:
+- id: username
+  label: MQTT Username 
+  dtype: string
+  default:
+  hide: part
+- id: password
+  label: MQTT Password
+  dtype: string
+  default:
+  hide: part
 
 #  Make one 'inputs' list entry per input and one 'outputs' list entry per output.
 #  Keys include:
