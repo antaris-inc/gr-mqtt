@@ -30,6 +30,11 @@ class mqtt_source(gr.sync_block):
 
         self.client = paho_mqtt.Client()
         self.client.username_pw_set(username, password)
+        self.client.tls_set()
+
+        #NOTE(bcwaldon): temporary until we have real TLS config
+        self.client.tls_insecure_set(True)
+
         self.client.connect(host, port, 30)
         self.client.loop_start()
 
