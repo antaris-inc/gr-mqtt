@@ -13,6 +13,8 @@ import paho.mqtt.client as paho_mqtt
 import pmt
 from gnuradio import gr
 import ssl
+from .mqtt_exceptions import MQTTConnectionError, MQTTDisconnectError
+
 
 
 class mqtt_source(gr.sync_block):
@@ -35,10 +37,10 @@ class mqtt_source(gr.sync_block):
         #NOTE(bcwaldon): temporary until we have real TLS config
         self.client.tls_set(cert_reqs=ssl.CERT_NONE)
         self.client.tls_insecure_set(True)
-
+        self.client.on_connect_fail = self.mqtt_connect_fail
+        self.client.on_disconnect = self.mqtt_disconnect
         self.client.connect(host, port, 30)
         self.client.loop_start()
-
         self.client.on_message = self.handle
         self.client.subscribe(topic)
 
@@ -51,3 +53,17 @@ class mqtt_source(gr.sync_block):
             pmt.intern("message"),
             pmt.init_u8vector(len(raw_msg), raw_msg)
         )
+
+    def mqtt_connect_fail(self, client, userdata, rc):
+        try:
+            reason_text = paho_mqtt.error_string(rc) 
+        except ValueError:
+            reason_text = f"Unknown reason code: {rc}"
+        raise MQTTConnectionError(f"Disconnected from MQTT broker: {reason_text}")
+    
+    def mqtt_disconnect(self, client, userdata, rc):
+        try:
+            reason_text = paho_mqtt.error_string(rc) 
+        except ValueError:
+            reason_text = f"Unknown reason code: {rc}"
+        raise MQTTDisconnectError(f"Disconnected from MQTT broker: {reason_text}")
