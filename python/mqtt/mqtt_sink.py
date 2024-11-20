@@ -37,7 +37,6 @@ class mqtt_sink(gr.sync_block):
         self.client.tls_insecure_set(True)
         self.client.on_connect_fail = self.mqtt_connect_fail
         self.client.on_disconnect = self.mqtt_disconnect
-
         self.client.connect(host, port, 30)
         self.client.loop_start()            
 
