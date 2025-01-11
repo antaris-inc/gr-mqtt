@@ -41,23 +41,10 @@ class mqtt_sink(gr.sync_block):
         #NOTE(bcwaldon): temporary until we have real TLS config
         self.client.tls_set(cert_reqs=ssl.CERT_NONE)
         self.client.tls_insecure_set(True)
-        self.client.on_connect = self.on_connect
         self.client.on_connect_fail = self.mqtt_connect_fail
         self.client.on_disconnect = self.mqtt_disconnect
         self.client.connect(host, port, 30)
         self.client.loop_start()
-
-    
-    def on_connect(self, client, userdata, flags, rc):
-        if rc == 0 and client.is_connected():
-            self.logger.info(f"MQTT sink connected to MQTT broker: {self.host}:{self.port}")
-            result, mid = client.subscribe(self.topic)
-            if result == paho_mqtt.MQTT_ERR_SUCCESS:
-                self.logger.info(f"MQTT sink subscribed to topic: {self.topic}")
-            else:
-                print(f"Subscription failed with error code: {result.name}")                
-        else:
-            self.logger(f'Failed to connect, return code {rc}')        
 
     def handle(self, msg):
         raw_msg = pmt.to_python(msg).tobytes()
